@@ -50,8 +50,7 @@ if (isset($_POST['submitted'])){
 
 <div>
 
-<!--Add a new player here with text boxes(includes name, about)
-	User is sent to another page to verify success-->
+<!--Add a new business here-->
 <form method="post" action="add_biz.php">
 <input type="hidden" name="submitted" value="true" />
 <fieldset>
