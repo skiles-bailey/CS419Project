@@ -30,6 +30,7 @@ td{
 		<tr>
 			<td>Business ID</td>
 			<td>Business Name</td>
+			<td>View Business</td>
 			<td>Update Business</td>
 			<td>Delete Business</td>
 		</tr>
@@ -51,6 +52,7 @@ if(!($stmt->bind_result($biz_id, $biz_name))){
 }
 while ($stmt->fetch()){
 	echo "<tr>\n<td>\n" . $biz_id . "\n</td>\n<td>\n" . $biz_name . "\n</td>\n<td>\n";
+	echo "<a href=\"view_biz.php?biz_id=" . $biz_id . "\">View Business</a>\n</td>\n<td>\n";
 	echo "<a href=\"update.php?biz_id=" . $biz_id . "\">Update Business</a>\n</td>\n<td>\n";
 	echo "<a href=\"delete_biz.php?biz_id=" . $biz_id . "\">Delete Business</a>\n";
 	}
