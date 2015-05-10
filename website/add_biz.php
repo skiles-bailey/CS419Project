@@ -1,19 +1,15 @@
 <?php
 	require('db/connect.php');
-
 	
 if (isset($_POST['submitted'])){
-	if (empty($_POST["biz_name"])) {
-     echo "<font color='red'>* Business name is required</font>";
-	 echo "<br>";
-	} 
-	else {
-		$biz_name = $_POST['biz_name'];
-	}
-
+	$biz_name = $_POST['biz_name'];
 	$phone = $_POST['phone'];
 	$website = $_POST['website'];
 	$hours = $_POST['hours'];
+	$address = $_POST['address'];
+	$address2 = $_POST['address2'];
+	$city = $_POST['city'];
+	$zipcode = $_POST['zipcode'];
 	
 	if (empty($_POST["service_id"])) {
      echo "<font color='red'>* Service type is required</font>";
@@ -23,14 +19,7 @@ if (isset($_POST['submitted'])){
 		$service_id = $_POST['service_id'];
 	}
 	
-	$sqlinsert = "INSERT INTO business (biz_name, phone, website, hours, service_id) VALUES ('$biz_name', '$phone', '$website', '$hours', $service_id)";
-	
-	$address = $_POST['address'];
-	$address2 = $_POST['address2'];
-	$city = $_POST['city'];
-	$zipcode = $_POST['zipcode'];
-	
-	$sqlinsert2 = "INSERT INTO address (address, address2, city, zipcode) VALUES ('$address', '$address2', '$city', '$zipcode')";
+	$sqlinsert = "INSERT INTO business (biz_name, address, address2, city, zipcode, phone, website, hours, service_id) VALUES ('$biz_name', '$address', '$address2', '$city', '$zipcode', '$phone', '$website', '$hours', $service_id)";
 	
 	if(!mysqli_query($mysqli, $sqlinsert)){
 		echo "<br>";
@@ -50,12 +39,12 @@ if (isset($_POST['submitted'])){
 
 <div>
 
-<!--Add a new business here-->
+<!--Add a new business form-->
 <form method="post" action="add_biz.php">
 <input type="hidden" name="submitted" value="true" />
 <fieldset>
 	<legend>Add a new business</legend>
-	<label>Business Name <input type="text" name="biz_name" /></label><br><br>
+	<label>Business Name <input type="text" name="biz_name" required/></label><br><br>
 	<label>Address <input type="text" name="address" /></label><br><br>
 	<label>Address2 <input type="text" name="address2" /></label><br><br>
 	<label>City <input type="text" name="city" /></label><br><br>
@@ -63,6 +52,7 @@ if (isset($_POST['submitted'])){
 	<label>Phone <input type="text" name="phone" /></label><br><br>
 	<label>Website <input type="text" name="website" /></label><br><br>
 	<label>Hours <input type="text" name="hours" /></label><br>
+	
 	
 	<p>Type of Service:
 	<select name="service_id">
@@ -85,8 +75,21 @@ echo '\n';
 $stmt->close();
 ?>
 	</select><br><br>
-	
-<!--Category list-->
+
+<input type="submit"  value="Add Business"/>
+<button type="reset" value="Reset">Reset</button>
+</fieldset>
+</div>
+</form>
+
+</div>
+
+<div>
+<br />
+<a href="index.php">Go back to home</a>
+
+
+<!--Category list for reference-->
 	<p>Categories:
 	<select name="categories">
 	<option value="" selected="selected">Select:</option>
@@ -108,18 +111,6 @@ echo '\n';
 $stmt->close();
 ?>
 	</select><br><br>
-
-<input type="submit"  value="Add Business"/>
-</fieldset>
-</div>
-</form>
-
-</div>
-
-<div>
-<br /><br />
-<a href="index.php">Go back to home</a>
-</div>
 
 </body>
 </html>

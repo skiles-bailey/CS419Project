@@ -31,6 +31,7 @@ td{
 			<td>Business ID</td>
 			<td>Business Name</td>
 			<td>Update Business</td>
+			<td>Delete Business</td>
 		</tr>
 		
 <!--Display business info here in a table (includes ID and business name)-->
@@ -50,12 +51,16 @@ if(!($stmt->bind_result($biz_id, $biz_name))){
 }
 while ($stmt->fetch()){
 	echo "<tr>\n<td>\n" . $biz_id . "\n</td>\n<td>\n" . $biz_name . "\n</td>\n<td>\n";
-	echo "<a href=\"update.php?biz_id=" . $biz_id . "\">Update Business</a>\n";
+	echo "<a href=\"update.php?biz_id=" . $biz_id . "\">Update Business</a>\n</td>\n<td>\n";
+	echo "<a href=\"delete_biz.php?biz_id=" . $biz_id . "\">Delete Business</a>\n";
 	}
 $stmt->close();
 ?>
 	</table><br>
 </div>
+
+<a href="add_biz.php">Add a business</a>
+
 
 </body>
 </html>
