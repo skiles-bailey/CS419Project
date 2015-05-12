@@ -1,116 +1,108 @@
 <?php
-	require('db/connect.php');
+
+    // connects to the database
+    include('db/connect.php');
 	
-if (isset($_POST['submitted'])){
-	$biz_name = $_POST['biz_name'];
-	$phone = $_POST['phone'];
-	$website = $_POST['website'];
-	$hours = $_POST['hours'];
-	$address = $_POST['address'];
-	$address2 = $_POST['address2'];
-	$city = $_POST['city'];
-	$zipcode = $_POST['zipcode'];
-	
-	if (empty($_POST["service_id"])) {
-     echo "<font color='red'>* Service type is required</font>";
-	 echo "<br>";
-	} 
-	else {
-		$service_id = $_POST['service_id'];
-	}
-	
-	$sqlinsert = "INSERT INTO business (biz_name, address, address2, city, zipcode, phone, website, hours, service_id) VALUES ('$biz_name', '$address', '$address2', '$city', '$zipcode', '$phone', '$website', '$hours', $service_id)";
-	
-	if(!mysqli_query($mysqli, $sqlinsert)){
-		echo "<br>";
-		echo "<b>Error inserting new business</b>";
-		echo "<br><br>";
-	 }
-	else{
-		echo "<b>One business added successfully!</b>";
-		echo "<br><br>";
-	}
-}
+	function renderForm($biz_name = '', $address ='', $address2 ='', $city ='', $zipcode ='', $phone ='', $website ='', $hours ='', $service_id ='', $error = '', $biz_id = '')
+	{ 
 ?>
 
-<!DOCTYPE html>
-<html>
-<body>
-
-<div>
-
-<!--Add a new business form-->
-<form method="post" action="add_biz.php">
-<input type="hidden" name="submitted" value="true" />
-<fieldset>
-	<legend>Add a new business</legend>
-	<label>Business Name <input type="text" name="biz_name" required/></label><br><br>
-	<label>Address <input type="text" name="address" /></label><br><br>
-	<label>Address2 <input type="text" name="address2" /></label><br><br>
-	<label>City <input type="text" name="city" /></label><br><br>
-	<label>Zip Code <input type="text" name="zipcode" /></label><br><br>
-	<label>Phone <input type="text" name="phone" /></label><br><br>
-	<label>Website <input type="text" name="website" /></label><br><br>
-	<label>Hours <input type="text" name="hours" /></label><br>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+	<html>
+	<head>	
+		<title> Add New Business </title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	</head>
 	
 	
-	<p>Type of Service:
-	<select name="service_id">
-	<option value="" selected="selected">Select one</option>
-<?php
-if(!($stmt = $mysqli->prepare("SELECT service_id, service_type
-FROM service S"))){
-	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-}
-if(!($stmt->execute())){
-	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-if(!($stmt->bind_result($service_id, $service_type))){
-	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-while ($stmt->fetch()){
-	echo '<option value=" '. $service_id . ' "> ' . $service_type . '</option>\n';
-}
-echo '\n';
-$stmt->close();
-?>
-	</select><br><br>
-
-<input type="submit"  value="Add Business"/>
-<button type="reset" value="Reset">Reset</button>
-</fieldset>
-</div>
-</form>
-
-</div>
-
-<div>
-<br />
-<a href="index.php">Go back to home</a>
-
-
-<!--Category list for reference-->
-	<p>Categories:
-	<select name="categories">
-	<option value="" selected="selected">Select:</option>
-<?php
-if(!($stmt = $mysqli->prepare("SELECT scat_id, scat_name
-FROM subcategory SC"))){
-	echo "Prepare failed: "  . $stmt->errno . " " . $stmt->error;
-}
-if(!($stmt->execute())){
-	echo "Execute failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-if(!($stmt->bind_result($scat_id, $scat_name))){
-	echo "Bind failed: "  . $mysqli->connect_errno . " " . $mysqli->connect_error;
-}
-while ($stmt->fetch()){
-	echo '<option value=" '. $scat_id . ' "> ' . $scat_name . '</option>\n';
-}
-echo '\n';
-$stmt->close();
-?>
-	</select><br><br>
-
-</body>
+	<body>
+		<h2>Add New Business</h2>
+		<?php 
+			if ($error != ''){
+				echo "<div style='padding:4px; color:red'>" . $error. "</div><br/>";
+			} 
+		?>
+		
+		<!-- Add Business Form -->	
+		<form action="" method="post">
+		<div>
+			<?php 
+				if ($biz_id != ''){ 
+			?>
+			<input type="hidden" name="biz_id" value="" />
+			<p><strong>Business ID:</strong></p>
+			<?php } ?>
+			
+			<!-- Form Fields -->		
+			<strong>Business Name: *</strong> <input type="text" name="biz_name" value=""/><br/><br/>
+			<strong>Address: </strong> <input type="text" name="address" value=""/><br/><br/>
+			<strong>Address2: </strong> <input type="text" name="address2" value=""/><br/><br/>
+			<strong>City: </strong> <input type="text" name="city" value=""/><br/><br/>
+			<strong>Zip Code: </strong> <input type="text" name="zipcode" value=""/><br/><br/>
+			<strong>Phone: </strong> <input type="text" name="phone" value=""/><br/><br/>
+			<strong>Website: </strong> <input type="text" name="website" value=""/><br/><br/>
+			<strong>Hours: </strong> <input type="text" name="hours" value=""/><br/><br/>
+			<strong>Type of Service: *</strong> 
+				<input type="radio" name="service_id" value="1"/>Reuse 
+				<input type="radio" name="service_id" value="2"/>Repair<br/>
+			<p>* required</p>
+			
+			<!-- Submit and Reset Buttons -->	
+			<input type="submit" name="submit" value="Submit" />
+			<input type="reset" name="reset" value="Reset" />
+		</div>
+		</form>
+		<br/>
+		<a href="view.php">Back To View Business Records</a><br/>
+		<a href="index.php">Back To Home</a>
+	</body>
 </html>
+		
+<?php }
+	if (isset($_POST['submit'])){
+	
+		// gets the data from the form
+		$biz_name = htmlentities($_POST['biz_name'], ENT_QUOTES);
+		$address = htmlentities($_POST['address'], ENT_QUOTES);
+		$address2 = htmlentities($_POST['address2'], ENT_QUOTES);
+		$city = htmlentities($_POST['city'], ENT_QUOTES);
+		$zipcode = htmlentities($_POST['zipcode'], ENT_QUOTES);
+		$phone = htmlentities($_POST['phone'], ENT_QUOTES);
+		$website = htmlentities($_POST['website'], ENT_QUOTES);
+		$hours = htmlentities($_POST['hours'], ENT_QUOTES);
+		$service_id = htmlentities($_POST['service_id'], ENT_QUOTES);
+			
+		// checks to see if biz_name and service_id is empty
+		if ($biz_name == '' || $service_id == ''){
+		
+			// if it's empty an error message is shown
+			$error = 'ERROR: Please fill in all required fields';
+			renderForm($biz_name, $address, $address2, $city, $zipcode, $phone, $website, $hours, $service_id, $error);
+		}
+		else{
+		
+			// inserts the new record into the database
+			if ($stmt = $mysqli->prepare("INSERT business (biz_name, address, address2, city, zipcode, phone, website, hours, service_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+				$stmt->bind_param("ssssssssi", $biz_name, $address, $address2, $city, $zipcode, $phone, $website, $hours, $service_id);
+				$stmt->execute();
+				$stmt->close();
+			}
+			
+			// an error message is shown if there is a problem with the query
+			else{
+				echo "ERROR: Could not prepare SQL statement.";
+			}
+					
+			// redirects the user once a new record has been successfully entered into the database
+			header("Location: view.php");
+		}		
+	}
+
+	// show the form
+	else{
+		renderForm();
+	}
+	
+	// close database connection
+	$mysqli->close();
+?>
