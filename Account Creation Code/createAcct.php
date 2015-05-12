@@ -46,15 +46,16 @@ if (!isset($_POST['newUsername']) || !isset($_POST['newPassword1']) ||
     } else {
         $stmt->close();
         
-        if (!($stmt = $mysqli->prepare("INSERT INTO Accounts(username, 
-                                        password) VALUES (?, ?)"))) {
+        if (!($stmt = $mysqli->prepare("INSERT INTO Accounts(username, password, email, level) VALUES (?, ?, ?, ?)"))) {
             echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
         }
         
         $newUsername = $_POST['newUsername'];
         $newPassword1 = $_POST['newPassword1'];
+        $newEmail = $_POST['newEmail'];
+        $newLevel = 0;
         
-        if (!$stmt->bind_param("ss", $newUsername, $newPassword1)) {
+        if (!$stmt->bind_param("sssi", $newUsername, $newPassword1, $newEmail, $newLevel)) {
             echo "Binding parameters failed: (" . $stmt->errno . ") "
                  . $stmt->error;
         }

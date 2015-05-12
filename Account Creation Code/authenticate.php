@@ -43,7 +43,7 @@ if (!isset($_POST['username']) || !isset($_POST['password'])) {
             session_start();
             $_SESSION['username'] = $_POST['username'];
             $_SESSION['logged_in'] = 'yes';
-            header("Location: projB.html");
+            header("Location: index.php");
         } else {
             header("Location: login.php");
         }

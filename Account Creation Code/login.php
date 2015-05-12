@@ -12,7 +12,7 @@ session_start();
   
   <body>
     <div class="banner">
-      Vote with your Wallet!
+      CS 419 Software Project
     </div>
     <div class="loginBar">
       <?php
@@ -27,7 +27,11 @@ session_start();
       ?>
     
     <div id="loginPadding"></div>
-    
+    <?php
+
+    if($_SESSION['level'] == 1)
+    {
+      echo '
     <form method="post" action="createAcct.php">
       <div id="loginCenter">
         <fieldset id="createAcct">
@@ -45,12 +49,17 @@ session_start();
             <input type="password" name="newPassword2">
           </div>
           <div>
+            <label>Email:</label>
+            <input type="text" name="newEmail">
+          </div>
+          <div>
             <input type="submit" name="CreateAcct" value="Create Account">
           </div>
           <div id="errorMsg2"><br></div>
         </fieldset>
-      </form>
-       
+    </form>';
+    }
+    ?>   
       <form method="post" action="authenticate.php">
         <fieldset id="login">
           <legend>Login</legend>
